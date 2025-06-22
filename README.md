@@ -94,7 +94,7 @@ SOUNDCLOUD_PLAYLIST_ID=your_actual_soundcloud_playlist_id
 ### 5. Bot の起動
 
 ```bash
-uv run python src/main.py
+uv run python start.py
 ```
 
 初回起動時に、ブラウザでYouTubeとSoundCloudの認証画面が開きます。
