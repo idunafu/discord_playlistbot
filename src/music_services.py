@@ -1,6 +1,6 @@
 """音楽サービス連携モジュール
 
-YouTube APIとSoundCloud API（将来実装）
+YouTube APIとSoundCloud API（実装済み）
 """
 
 import json
@@ -196,8 +196,3 @@ class YouTubeService:
         except HttpError as e:
             logging.exception(f"動画情報取得エラー: {e}")
             return None
-
-
-# SoundCloudServiceは soundcloud_service.py で実装されています
-# 使用する場合は以下をインポート:
-# from soundcloud_service import SoundCloudService

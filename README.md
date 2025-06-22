@@ -175,7 +175,7 @@ Discord Developer Portal で生成した招待URLを使用して、BotをDiscord
 
 - Client ID/Secret が正しいか確認
 - Redirect URIが `http://localhost:8888/callback` になっているか確認
-- 詳細は `SOUNDCLOUD_API.md` を参照
+- 詳細は `docs/SOUNDCLOUD_API.md` を参照
 
 ### プレイリスト追加エラー
 
@@ -195,15 +195,23 @@ discord_playlistbot/
 │   ├── soundcloud_service.py # SoundCloud API連携
 │   └── commands.py          # スラッシュコマンド定義
 ├── data/                    # データ・認証情報ディレクトリ
-├── .env                     # 環境変数設定
-├── bot.log                  # ログファイル
-├── SOUNDCLOUD_API.md        # SoundCloud API実装詳細
-└── README.md
+├── docs/                    # ドキュメント
+│   ├── DEVELOPMENT.md       # 開発者向けドキュメント
+│   └── SOUNDCLOUD_API.md    # SoundCloud API実装詳細
+├── env_template.txt         # 環境変数テンプレート
+├── pyproject.toml           # Pythonプロジェクト設定
+├── start.py                 # Bot起動スクリプト
+├── uv.lock                  # 依存関係ロックファイル
+├── LICENSE                  # ライセンスファイル
+├── README.md                # このファイル
+├── .env                     # 環境変数設定（実行時作成）
+└── bot.log                  # ログファイル（実行時作成）
 ```
 
 ## 🔗 関連ドキュメント
 
-- **[SOUNDCLOUD_API.md](SOUNDCLOUD_API.md)**: SoundCloud API実装の詳細
+- **[SOUNDCLOUD_API.md](docs/SOUNDCLOUD_API.md)**: SoundCloud API実装の詳細
+- **[DEVELOPMENT.md](docs/DEVELOPMENT.md)**: 開発者向けドキュメント
 - **[SoundCloud API Guide](https://developers.soundcloud.com/docs/api/guide)**: 公式APIドキュメント
 
 ## 📝 ライセンス
