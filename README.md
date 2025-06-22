@@ -210,8 +210,9 @@ discord_playlistbot/
 
 ## 🔗 関連ドキュメント
 
-- **[SOUNDCLOUD_API.md](docs/SOUNDCLOUD_API.md)**: SoundCloud API実装の詳細
 - **[DEVELOPMENT.md](docs/DEVELOPMENT.md)**: 開発者向けドキュメント
+- **[PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)**: プロジェクト概要・アーキテクチャ
+- **[SOUNDCLOUD_API.md](docs/SOUNDCLOUD_API.md)**: SoundCloud API実装の詳細
 - **[SoundCloud API Guide](https://developers.soundcloud.com/docs/api/guide)**: 公式APIドキュメント
 
 ## 📝 ライセンス
