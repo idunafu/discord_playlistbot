@@ -2,7 +2,6 @@
 """
 
 import logging
-from typing import Optional
 
 import discord
 from discord import app_commands
@@ -25,7 +24,7 @@ async def setup_commands(bot: commands.Bot) -> None:
     async def setting(
         interaction: discord.Interaction,
         action: app_commands.Choice[str],
-        channel: Optional[discord.TextChannel] = None,
+        channel: discord.TextChannel | None = None,
     ) -> None:
         """設定コマンド"""
         if not interaction.guild:
@@ -95,7 +94,7 @@ async def setup_commands(bot: commands.Bot) -> None:
             value=(
                 "• YouTube: `youtube.com/watch`, `youtu.be`\n"
                 "• YouTube Music: `music.youtube.com`\n"
-                "• SoundCloud: `soundcloud.com` （OAuth 2.1認証済み）"
+                "• SoundCloud: `soundcloud.com` （設定済みの場合のみ）"
             ),
             inline=False,
         )
@@ -230,6 +229,7 @@ async def _process_backlog(
 
         youtube_processed = 0
         soundcloud_processed = 0
+        soundcloud_skipped = 0
         total_urls = 0
 
         # 過去のメッセージを取得して処理
@@ -256,12 +256,15 @@ async def _process_backlog(
                         youtube_processed += 1
 
                 elif service_type == "soundcloud":
-                    success = await bot.soundcloud_service.add_to_playlist(url)
-                    if success:
-                        await bot.db_manager.mark_url_processed(
-                            interaction.guild.id, url, service_type,
-                        )
-                        soundcloud_processed += 1
+                    if bot.soundcloud_service:
+                        success = await bot.soundcloud_service.add_to_playlist(url)
+                        if success:
+                            await bot.db_manager.mark_url_processed(
+                                interaction.guild.id, url, service_type,
+                            )
+                            soundcloud_processed += 1
+                    else:
+                        soundcloud_skipped += 1
 
         # 結果報告
         total_processed = youtube_processed + soundcloud_processed
@@ -273,6 +276,13 @@ async def _process_backlog(
         embed.add_field(name="総URL数", value=f"{total_urls}件", inline=True)
         embed.add_field(name="YouTube追加", value=f"{youtube_processed}件", inline=True)
         embed.add_field(name="SoundCloud追加", value=f"{soundcloud_processed}件", inline=True)
+
+        if soundcloud_skipped > 0:
+            embed.add_field(
+                name="SoundCloudスキップ",
+                value=f"{soundcloud_skipped}件（API未設定）",
+                inline=False,
+            )
 
         await interaction.followup.send(embed=embed)
 

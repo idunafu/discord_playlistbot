@@ -251,10 +251,5 @@ projectBrief.md
 memory-bank/
 .clinerules
 
-input/
-output/
-
-real_data/
-results/
-
 .cursor/
+data/

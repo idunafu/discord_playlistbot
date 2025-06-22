@@ -5,11 +5,11 @@ YouTubeとSoundCloudのリンクを自動でプレイリストに追加するDis
 ## 🎯 機能
 
 - **自動リンク検出**: Discordの特定チャンネルでYouTubeとSoundCloudのURLを自動検出
-- **プレイリスト追加**: 検出したURLを指定したYouTubeとSoundCloudプレイリストに自動追加
+- **プレイリスト追加**: 検出したURLを指定したYouTubeプレイリストに自動追加（SoundCloudは設定した場合のみ）
 - **重複チェック**: 既に追加済みの動画・トラックは再度追加しない
 - **スラッシュコマンド**: `/setting`, `/backlog`, `/help` コマンドで簡単設定
 - **過去ログ処理**: 過去のメッセージを遡ってURLを一括処理
-- **OAuth 2.1認証**: SoundCloud PKCE認証対応
+- **柔軟な設定**: SoundCloud APIなしでもYouTubeのみで動作可能
 
 ## 📋 必要な準備
 
@@ -38,7 +38,9 @@ YouTubeとSoundCloudのリンクを自動でプレイリストに追加するDis
    - 例: `https://www.youtube.com/playlist?list=PLxxxxxxxxxxxxxxxxxxxxxx`
    - プレイリストID: `PLxxxxxxxxxxxxxxxxxxxxxx`
 
-### 4. SoundCloud API 設定
+### 4. SoundCloud API 設定（オプション）
+
+**注意**: SoundCloud APIの設定は必須ではありません。設定しない場合、YouTubeのみで動作します。
 
 1. [SoundCloud Developer](https://developers.soundcloud.com/) にアクセス
 2. 「Register a new application」をクリック
@@ -46,7 +48,7 @@ YouTubeとSoundCloudのリンクを自動でプレイリストに追加するDis
    - **Redirect URI**: `http://localhost:8888/callback`
 4. **Client ID** と **Client Secret** をコピー
 
-### 5. SoundCloud プレイリスト ID の取得
+### 5. SoundCloud プレイリスト ID の取得（オプション）
 
 1. SoundCloudでプレイリストを作成
 2. ブラウザの開発者ツールを使用してプレイリストIDを取得
@@ -73,9 +75,12 @@ uv sync
 2. 必要な値を設定:
 
 ```env
+# 必須設定
 DISCORD_BOT_TOKEN=your_actual_discord_bot_token
 YOUTUBE_API_KEY=your_actual_youtube_api_key
 YOUTUBE_PLAYLIST_ID=your_actual_youtube_playlist_id
+
+# オプション設定（SoundCloudを使用する場合のみ）
 SOUNDCLOUD_CLIENT_ID=your_actual_soundcloud_client_id
 SOUNDCLOUD_CLIENT_SECRET=your_actual_soundcloud_client_secret
 SOUNDCLOUD_PLAYLIST_ID=your_actual_soundcloud_playlist_id
@@ -147,10 +152,12 @@ Discord Developer Portal で生成した招待URLを使用して、BotをDiscord
 - `https://youtu.be/VIDEO_ID`
 - `https://music.youtube.com/watch?v=VIDEO_ID`
 
-### SoundCloud
+### SoundCloud（設定した場合のみ）
 
 - `https://soundcloud.com/user/track`
 - `https://soundcloud.com/user/sets/playlist`
+
+**注意**: SoundCloud APIが設定されていない場合、SoundCloudのURLは処理されません。
 
 ## 🔧 トラブルシューティング
 

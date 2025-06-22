@@ -1,16 +1,17 @@
 # Discord音楽リンク収集Bot 環境変数設定
 
-# Discord Bot設定
+# Discord Bot設定（必須）
 DISCORD_BOT_TOKEN=your_discord_bot_token_here
 
-# YouTube API設定
+# YouTube API設定（必須）
 YOUTUBE_API_KEY=your_youtube_api_key_here
 YOUTUBE_PLAYLIST_ID=your_youtube_playlist_id_here
 
-# SoundCloud API設定
-SOUNDCLOUD_CLIENT_ID=your_soundcloud_client_id_here
-SOUNDCLOUD_CLIENT_SECRET=your_soundcloud_client_secret_here
-SOUNDCLOUD_PLAYLIST_ID=your_soundcloud_playlist_id_here
+# SoundCloud API設定（オプション）
+# これらを設定しない場合、SoundCloudのURLは処理されずYouTubeのみで動作します
+# SOUNDCLOUD_CLIENT_ID=your_soundcloud_client_id_here
+# SOUNDCLOUD_CLIENT_SECRET=your_soundcloud_client_secret_here
+# SOUNDCLOUD_PLAYLIST_ID=your_soundcloud_playlist_id_here
 
 # その他設定
 DATABASE_PATH=./data/bot_data.db
@@ -21,4 +22,5 @@ LOG_LEVEL=INFO
 # 2. 各項目の値を実際の値に変更してください
 # 3. Google Cloud ConsoleからOAuth認証情報をダウンロードし、
 #    ./data/youtube_oauth_credentials.json として保存してください
-# 4. SoundCloud API アプリを登録して認証情報を取得してください 
+# 4. SoundCloud API を使用する場合は、アプリを登録して認証情報を取得し、
+#    上記のSoundCloud設定行のコメントアウト（#）を外して値を設定してください 

@@ -35,14 +35,25 @@ class MusicPlaylistBot(commands.Bot):
         self.config = BotConfig()
         self.db_manager = DatabaseManager()
         self.youtube_service = YouTubeService()
-        self.soundcloud_service = SoundCloudService()
+
+        # SoundCloudサービスは設定がある場合のみ初期化
+        if self.config.is_soundcloud_available:
+            self.soundcloud_service = SoundCloudService()
+            logging.info("SoundCloud設定を検出しました")
+        else:
+            self.soundcloud_service = None
+            logging.info("SoundCloud設定が見つかりません。YouTubeのみで動作します")
+
         self.url_extractor = URLExtractor()
 
     async def setup_hook(self) -> None:
         """Bot起動時の初期設定"""
         await self.db_manager.initialize()
         await self.youtube_service.initialize()
-        await self.soundcloud_service.initialize()
+
+        # SoundCloudサービスがある場合のみ初期化
+        if self.soundcloud_service:
+            await self.soundcloud_service.initialize()
 
         # スラッシュコマンドを同期
         try:
@@ -55,7 +66,10 @@ class MusicPlaylistBot(commands.Bot):
         """Bot起動完了時の処理"""
         logging.info(f"{self.user} としてログインしました")
         logging.info(f"Bot ID: {self.user.id}")
-        logging.info("音楽リンク収集Botが起動しました")
+        services = ["YouTube"]
+        if self.soundcloud_service:
+            services.append("SoundCloud")
+        logging.info(f"音楽リンク収集Botが起動しました（対応サービス: {', '.join(services)}）")
 
     async def on_message(self, message: discord.Message) -> None:
         """メッセージ受信時の処理"""
@@ -96,17 +110,19 @@ class MusicPlaylistBot(commands.Bot):
                     )
 
             elif service_type == "soundcloud":
-                success = await self.soundcloud_service.add_to_playlist(url)
-                if success:
-                    await self._send_notification(
-                        message.guild.id,
-                        f"✅ SoundCloudプレイリストに追加しました: {url}",
-                    )
-                else:
-                    await self._send_notification(
-                        message.guild.id,
-                        f"❌ SoundCloudプレイリストへの追加に失敗しました: {url}",
-                    )
+                if self.soundcloud_service:
+                    success = await self.soundcloud_service.add_to_playlist(url)
+                    if success:
+                        await self._send_notification(
+                            message.guild.id,
+                            f"✅ SoundCloudプレイリストに追加しました: {url}",
+                        )
+                    else:
+                        await self._send_notification(
+                            message.guild.id,
+                            f"❌ SoundCloudプレイリストへの追加に失敗しました: {url}",
+                        )
+                # SoundCloudが設定されていない場合は何もしない（サイレントスキップ）
 
         except Exception as e:
             logging.exception(f"URL処理中にエラーが発生: {e}")
@@ -132,7 +148,7 @@ class MusicPlaylistBot(commands.Bot):
 
     async def close(self) -> None:
         """Botを終了"""
-        if hasattr(self, "soundcloud_service"):
+        if self.soundcloud_service and hasattr(self.soundcloud_service, "close"):
             await self.soundcloud_service.close()
         await super().close()
 
